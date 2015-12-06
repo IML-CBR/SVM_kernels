@@ -9,13 +9,28 @@ cd(fileparts(tmp.Filename));
 % 1)
 Dataset = load('../Data/example_dataset_1');
 labels = Dataset.labels;
-data = Dataset.data;
+data = (Dataset.data)';
 % 2)
 sigma = 1;
-K = exp( -L2_distance(data,data)/(2*sigma^2));
-
+K = exp( -L2_distance(data',data')/(2*sigma^2));
+figure; imagesc(K); title('Gram matrix for sigma = 1');
 % 3)
-% 4)
+minvals = (K == min(min(K)));
+maxvals = (K == max(max(K)));
+figure;
+subplot(1,2,1); imagesc(maxvals); title(strcat('Maximum values of K, with value: ',num2str(max(max(K)))));
+subplot(1,2,2); imagesc(minvals); title(strcat('Minimum values of K, with value: ',num2str(min(min(K)))));
+positivedefinite = all(eig(K) > 0);
+
+% 4) & 5)
+lambda = 1;
+sigma = 1;
+[model, v, K] = train_rbfSVM( labels, data, lambda, sigma );
+
+% 6)
+name = strcat('linear SVM soft with lambda ',num2str(lambda),' and sigma ',num2str(sigma));
+plotRbfSVM( data, labels, sigma, name, v, lambda, model );
+
 
 %% BLOCK 2 - Juli
 
