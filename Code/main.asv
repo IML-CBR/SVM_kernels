@@ -33,19 +33,21 @@ name = strcat('linear SVM soft with lambda ',num2str(lambda),' and sigma ',num2s
 plotRbfSVM2( data, labels, model, name );
 
 %% BLOCK 2 - Juli
-% 1)
-% 2)
+% 1) & 2)
+clear all;
+close all;
+hTree=findall(0,'Tag','tree viewer'); close(hTree)
+clc;
 Dataset = load('../Data/example_dataset_1');
 labels = Dataset.labels;
 data = Dataset.data';
 
-% 3)
-t = classregtree(data, labels)
-view(t)
-
-% 4)
 t = classregtree(data, labels, 'method', 'classification', 'prune', 'off')
 view(t)
+
+% 3)
+
+% 4)
 
 %% BLOCK 3 - Juli
 
