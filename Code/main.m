@@ -25,14 +25,15 @@ positivedefinite = all(eig(K) > 0);
 % 4) & 5)
 lambda = 1;
 sigma = 1;
-[model, v, K] = train_rbfSVM( labels, data, lambda, sigma );
+[model, v] = train_rbfSVM( labels, data, lambda, sigma );
 
 % 6)
 name = strcat('linear SVM soft with lambda ',num2str(lambda),' and sigma ',num2str(sigma));
-plotRbfSVM( data, labels, sigma, name, v, lambda, model );
+plotRbfSVM2( data, labels, model, name );
 
 
 %% BLOCK 2 - Juli
+
 
 %% BLOCK 3 - Juli
 
