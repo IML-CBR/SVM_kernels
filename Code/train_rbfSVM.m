@@ -46,8 +46,8 @@ else
   % and there are no support vectors on the margin
 
   r = 1 - model.vy' * K * diag(Y) ;
-  act = ismember(1:n, model.svs) ;
-  pos = Y > 0 ;
+  act = ismember(1:m, model.svs) ;
+  pos = Y' > 0 ;
 
   maxb = min([+r(pos & act),  -r(~pos & ~act)]) ;
   minb = max([-r(~pos & act), +r(pos & ~act)]) ;
