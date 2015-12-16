@@ -32,9 +32,9 @@ function plotRbfSVM( data, labels, model, name )
 
     [~,mid]=contour(x1Grid,x2Grid,reshape(y_pred, size(x1Grid,1),size(x1Grid,2)),[0 0]);
     set(mid,'color', 'b', 'linewidth', 1) ;
-    [~,marg]=contour(x1Grid,x2Grid,reshape(y_pred, size(x1Grid,1),size(x1Grid,2)),[-model.b -model.b]);
+    [~,marg]=contour(x1Grid,x2Grid,reshape(y_pred, size(x1Grid,1),size(x1Grid,2)),[-model.m -model.m]);
     set(marg,'color', 'r', 'linestyle', '--', 'linewidth', 0.5) ;
-    [~,marg]=contour(x1Grid,x2Grid,reshape(y_pred, size(x1Grid,1),size(x1Grid,2)),[model.b model.b]);
+    [~,marg]=contour(x1Grid,x2Grid,reshape(y_pred, size(x1Grid,1),size(x1Grid,2)),[model.m model.m]);
     set(marg,'color', 'r', 'linestyle', '--', 'linewidth', 0.5) ;
         % Decision boundary
     title(name)

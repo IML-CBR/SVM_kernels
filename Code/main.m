@@ -1,7 +1,7 @@
 %% Reset all
 clear all;
 close all;
-hTree=findall(0,'Tag','tree viewer'); close(hTree)
+close(findall(0,'Tag','tree viewer'));
 clc;
 %% Move to working directory
 tmp = matlab.desktop.editor.getActive;
@@ -13,23 +13,34 @@ labels = Dataset.labels;
 data = (Dataset.data)';
 % 2)
 sigma = 1;
+% Gram matrix
 K = exp( -L2_distance(data',data')/(2*sigma^2));
 figure; imagesc(K); title('Gram matrix for sigma = 1');
 % 3)
+% Maximum and minimum values
 minvals = (K == min(min(K)));
 maxvals = (K == max(max(K)));
 figure;
 subplot(1,2,1); imagesc(maxvals); title(strcat('Maximum values of K, with value: ',num2str(max(max(K)))));
 subplot(1,2,2); imagesc(minvals); title(strcat('Minimum values of K, with value: ',num2str(min(min(K)))));
-positivedefinite = all(eig(K) > 0);
+% Positive definite
+positivedefinite = all(eig(K) > 0)
 
 % 4) & 5)
 lambda = 1;
 sigma = 1;
+% RBF SVM model
 [model, v] = train_rbfSVM( labels, data, lambda, sigma );
-
+Nsvs=size(model.svs,1)
+Nsvm=size(model.margin,1)
+Mdist=model.m
+% Train Error
+K_dense = exp( -L2_distance(data(model.svs,:)',data')/(2*model.sigma^2)); 
+y_pred = model.vy(model.svs)' * K_dense;
+trainErr=1-mean(sign(y_pred)==labels')
 % 6)
 name = strcat('rbf SVM soft with lambda ',num2str(lambda),' and sigma ',num2str(sigma));
+% RBF plot on training data
 plotRbfSVM( data, labels, model, name );
 
 %% BLOCK 2 - Juli
@@ -83,6 +94,17 @@ data = Dataset.data';
 % 2)
 k = 5;
 kfolds = kfoldIndexer(data,k);
+% Class Frequencies
+freqPos = mean(labels == 1)
+freqNeg = mean(labels == -1)
+freqPosk = zeros(1,k);
+freqNegk = freqPosk;
+for i=1:k
+    freqPosk(i) = mean(labels(kfolds{i}) == 1);
+    freqNegk(i) = mean(labels(kfolds{i}) == -1);
+end
+freqPosk
+freqNegk
 %% 3)
 lambdas = [0.01,0.1,1,10];
 sigmas = [0.1,0.25,0.5,0.75,1,2.5,5,7.5,10];
@@ -123,12 +145,21 @@ plotRbfSVM( data, labels, model, name );
 % 3D surface
 figure;
 surf(sigmas,lambdas,errParamMat);
+xlabel('Sigma')
+ylabel('Lambda')
+zlabel('Error')
 % 3D interpolated surface
 figure;
 surf(sigmas,lambdas,errParamMat);shading interp;
+xlabel('Sigma')
+ylabel('Lambda')
+zlabel('Error')
 % 2D colormap
 figure;
 imagesc(sigmas,lambdas,errParamMat);
+xlabel('Sigma')
+ylabel('Lambda')
+zlabel('Error')
 % Error obtained from cross-validation table for lambda as rows and sigma
 % as columns
 errParamMat

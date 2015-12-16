@@ -39,7 +39,7 @@ function [  model, v ] = train_rbfSVM( labels, data, lambda, sigma )
 
 if ~ isempty(model.margin)
   % This works almost all times
-  model.b = 1-mean(Y(model.margin)'.*(Y(model.margin)' - model.vy(model.svs)' * K(model.svs,model.margin))) ;
+  model.m = 1-mean(Y(model.margin)'.*(Y(model.margin)' - model.vy(model.svs)' * K(model.svs,model.margin))) ;
 
 else
   % Special cases to deal with the case in which C is very small
@@ -52,12 +52,12 @@ else
   maxb = min([+r(pos & act),  -r(~pos & ~act)]) ;
   minb = max([-r(~pos & act), +r(pos & ~act)]) ;
   if mean(Y(act)) <= -tolerance
-    model.b = maxb ;
+    model.m = maxb ;
   elseif mean(Y(act)) > tolerance
-    model.b = minb;
+    model.m = minb;
   else
     % Any b in the interval is equivalent
-    model.b = mean([minb maxb]) ;
+    model.m = mean([minb maxb]) ;
   end
 end
 
