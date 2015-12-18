@@ -191,7 +191,7 @@ for i=1:1:size(minparents,2)
 end
 
 % Plot best minparent found with cross-validation
-bestMinparent = minparents(find(min(errParamMat)==errParamMat,1,'first'));
+bestMinparent = minparents(find(min(errParamMat)==errParamMat,1,'last'));
 model = classregtree(data, labels, 'minparent',bestMinparent);
 view(model);
     
