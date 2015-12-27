@@ -305,7 +305,7 @@ K_dense = exp( -L2_distance(data_X(modelSVM.svs,:)',data_X')/(2*modelSVM.sigma^2
 predictionSVM = modelSVM.vy(modelSVM.svs)' * K_dense;
 accuracy_SVM = mean(data_Y==sign(predictionSVM)');
 ValidationErrSVM = 1-accuracy_SVM
-%% Tree-Out-Of-Sample-Error
+%% Tree Validation Error
 modelTree = classregtree(data_X, data_Y, 'minparent',bestMinparent);
 predictionTree = eval(modelTree,data_X);
 accuracy_Tree = mean(data_Y==sign(predictionTree));
